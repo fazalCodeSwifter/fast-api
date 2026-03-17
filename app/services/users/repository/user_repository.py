@@ -1,18 +1,33 @@
-from base_repository import UserBaseRepository
-from ....config.prisma import PrismaConnection
-from ..schema.user_schema import BaseUser, User
+from .base_repository import UserBaseRepository
+from app.config.prisma import PrismaConnection
+from typing import Dict, Any
+from ..schema.user_schema import User
 from prisma.types import UsersCreateInput
+from app.exception.validation_error import AppValidationError
 
 class UserRepository(UserBaseRepository):
     def __init__(self, db_client: PrismaConnection) -> None:
         self.db = db_client.db()
         
-    async def create_user(self, data: BaseUser) -> User:
+        # create user repository
+    async def create_user(self, data: Dict[str, Any]) -> User:
         try:
-            user_input = UsersCreateInput(**data.model_dump())
+            user_input = UsersCreateInput(**data)
             created_user = await self.db.users.create(data=user_input)
             if not created_user:
-                raise Exception('User create failed')
-            return User(**created_user.model_dump())
+                raise AppValidationError(message='User create failed', status_code=404)
+            return User(**created_user.model_dump(exclude={'password'}))
         except Exception as error:
             raise Exception(error)
+        
+        # find one user 
+    async def find_user(self, email: str) -> User | None:
+        try:
+            user = await self.db.users.find_unique(where={ 'email': email })
+            if user:
+                return User(**user.model_dump())
+            else:
+                return None
+        except Exception as error:
+            raise error
+        

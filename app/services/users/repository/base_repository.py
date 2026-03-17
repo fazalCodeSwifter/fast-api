@@ -1,21 +1,27 @@
 from abc import ABC, abstractmethod
-from typing import List
-from ..schema.user_schema import User, BaseUser
+from typing import Dict, Any
+# from typing import List
+from ..schema.user_schema import User
 
 class UserBaseRepository(ABC):
     @abstractmethod
-    async def create_user(self, data: BaseUser) -> User:
+    async def create_user(self, data: Dict[str, Any]) -> User:
         pass
+    
+    # @abstractmethod
+    # async def update_user(self, data: BaseUser) -> User:
+    #     pass
+    
+    # @abstractmethod
+    # async def find_all_user(self) -> List[User]:
+    #     pass
     
     @abstractmethod
-    async def update_user(self, data: BaseUser) -> User:
+    async def find_user(self, email: str) -> User | None:
         pass
     
+    
+class TokenBaseRepsitory(ABC):
     @abstractmethod
-    async def get_all_user(self) -> List[User]:
+    async def create_tokens(self, tokens: Dict[str, Any]) -> Dict[str, Any]:
         pass
-    
-    @abstractmethod
-    async def get_single_user(self, id: str) -> User:
-        pass
-    

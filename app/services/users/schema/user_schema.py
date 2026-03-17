@@ -7,9 +7,18 @@ class BaseUser(BaseModel):
     lastName: Annotated[Optional[str], Field(min_length=3, max_length=15, description='Enter Last name', examples=['Shah'])]
     username: Annotated[str, Field(..., description='Enter Username', examples=['fazal123'])]
     email: Annotated[EmailStr, Field(..., description='Enter Email', examples=['example@example.com'])]
-    password: Annotated[str, Field(..., description='Enter password')]
 
-class User(BaseUser):
+
+class CreateUser(BaseUser):
+        password: Annotated[str, Field(..., description='Enter password')]
+
+class User(CreateUser):
     id: Annotated[str, Field(...)]
     createdAt: Annotated[datetime, Field(default_factory=lambda: datetime.now(timezone.utc))]
     updatedAt: Annotated[datetime, Field(default_factory=lambda: datetime.now(timezone.utc))]
+    
+    
+    
+class LoginUser(BaseModel):
+     email: Annotated[EmailStr, Field(..., description='Enter Email', examples=['example@example.com'])] 
+     password: Annotated[str, Field(..., description='Enter password')]
