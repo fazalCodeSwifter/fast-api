@@ -12,10 +12,14 @@ class BaseUser(BaseModel):
 class CreateUser(BaseUser):
         password: Annotated[str, Field(..., description='Enter password')]
 
-class User(CreateUser):
+class User(BaseUser):
     id: Annotated[str, Field(...)]
     createdAt: Annotated[datetime, Field(default_factory=lambda: datetime.now(timezone.utc))]
     updatedAt: Annotated[datetime, Field(default_factory=lambda: datetime.now(timezone.utc))]
+    
+    
+class UserInDB(User):
+    password: Annotated[str, Field(..., description='Enter password')]
     
     
     

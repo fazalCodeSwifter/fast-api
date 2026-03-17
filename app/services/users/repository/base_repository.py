@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 # from typing import List
-from ..schema.user_schema import User
+from ..schema.user_schema import User, UserInDB
 
 class UserBaseRepository(ABC):
     @abstractmethod
@@ -17,7 +17,7 @@ class UserBaseRepository(ABC):
     #     pass
     
     @abstractmethod
-    async def find_user(self, email: str) -> User | None:
+    async def find_user(self, email: str) -> UserInDB | None:
         pass
     
     
