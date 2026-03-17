@@ -26,7 +26,6 @@ async def get_current_user(auth: HTTPAuthorizationCredentials = Depends(security
 
     # 2. check user if exist in db
     user = await db.db().users.find_unique(where={ 'id': user_id },)
-    print('USER -->', user)
     if user is None:
         raise credentials_exception
     
